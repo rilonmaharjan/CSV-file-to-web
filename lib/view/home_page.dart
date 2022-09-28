@@ -22,6 +22,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<List<dynamic>> data = [];
   String? filePath;
+  FirebaseInAppMessaging inAppMessage = FirebaseInAppMessaging.instance;
 
   @override
   void initState() {
@@ -31,7 +32,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-   FirebaseInAppMessaging inAppMessage = FirebaseInAppMessaging.instance;
     return Scaffold(
       appBar: AppBar(
         title: const Text("CSV To List"),
@@ -83,8 +83,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     "In App Notify",
                     style: TextStyle(color: Colors.white),
                   ),
-                  onPressed: () async {
-                    await inAppMessage.triggerEvent('awesome_event');
+                  onPressed: ()  {
+                     inAppMessage.triggerEvent('awesome_event');
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Triggering event: awesome_event'),
