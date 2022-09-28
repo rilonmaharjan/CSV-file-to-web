@@ -8,6 +8,8 @@ import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -41,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 color: Colors.green,
-                height: 30,
+                height: 40,
                 child: TextButton(
                   child: const Text(
                     "CSV To List",
@@ -55,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 color: Colors.green,
-                height: 30,
+                height: 40,
                 child: TextButton(
                   child: const Text(
                     "Toast Styles",
@@ -71,18 +73,25 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-            ElevatedButton(
-              onPressed: () async {
-                await inAppMessage.triggerEvent('awesome_event');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Triggering event: awesome_event'),
+             Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                color: Colors.green,
+                height: 40,
+                child: TextButton(
+                  child: const Text(
+                    "In App Notify",
+                    style: TextStyle(color: Colors.white),
                   ),
-                );
-              },
-              child: Text(
-                'Notification'.toUpperCase(),
-                style: const TextStyle(color: Colors.white),
+                  onPressed: () async {
+                    await inAppMessage.triggerEvent('awesome_event');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Triggering event: awesome_event'),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
             ListView.builder(
@@ -147,20 +156,53 @@ class _MyHomePageState extends State<MyHomePage> {
   void messageListener(BuildContext context) {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if (message.notification != null) {
-        showDialog(
-          context: context,
-          builder: ((BuildContext context) {
-            return SimpleDialog(
-              title: Column(
+         MotionToast(
+          icon: Icons.check_circle_outline,
+          iconSize: 0.0,
+          primaryColor: Colors.transparent,
+          secondaryColor: Colors.transparent,
+          animationCurve: Curves.bounceOut,
+          backgroundType: BackgroundType.transparent,
+          layoutOrientation: ToastOrientation.rtl,
+          animationType: AnimationType.fromRight,
+          position: MotionToastPosition.top,
+          animationDuration: const Duration(milliseconds: 1000),
+          borderRadius: 4.0,
+          padding: const EdgeInsets.only(top : 8.0, left: 8.0, right: 8.0),
+          height: MediaQuery.of(context).size.height * 0.095,
+          width: MediaQuery.of(context).size.width - 40,
+          title: Row(
+            children: [
+              const SizedBox(width: 20.0,),
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Title ${message.notification!.title}'),
-                  Text('Title ${message.notification!.body}'),
+                children:  [
+                  Text(
+                    '${message.notification!.title}',
+                    style:
+                        const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    '${message.notification!.body}',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
                 ],
               ),
-            );
-          }),
-        );
+              const Spacer(),
+              const Icon(
+                Icons.check_circle,
+                color: Colors.green,
+              ),
+            ],
+          ),
+          description: const SizedBox(),
+        ).show(context);
       }
     });
   }
