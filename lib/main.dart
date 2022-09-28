@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_app_installations/firebase_app_installations.dart';
 
 Future<void> backgroundHandler(RemoteMessage message) async {
   debugPrint(message.data.toString());
@@ -27,7 +26,6 @@ void main() async {
   FirebaseMessaging.instance.getToken().then((value) {
     debugPrint(value);
   });
-  await FirebaseInstallations.instance.getId().then((value) => debugPrint('id= $value'));
 }
 
 var navigatorKey = GlobalKey<NavigatorState>();
